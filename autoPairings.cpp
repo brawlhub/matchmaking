@@ -33,8 +33,8 @@ int getPlayerIndex(std::vector<std::vector<std::string>> playersVec, std::string
 
 int main() {
     //Input your database file and any previous pairing files here. MUST BE .TSV, NOT .CSV
-    std::string rankFile = "S9 - League Database - Resume.tsv";
-    std::vector<std::string>  previousPairings = {"S9 - League Database - W1Pairings.tsv", "S9 - League Database - W2Pairings.tsv", "S9 - League Database - W3Pairings.tsv"};
+    std::string rankFile = "S11 - League Database - Resume.tsv";
+    std::vector<std::string>  previousPairings = {};
     //Setting up variables
     std::vector<std::vector<std::string>> unrankedPlayers;
     std::fstream playerStream;
@@ -63,7 +63,12 @@ int main() {
                 row.push_back(word);
             }
             if(row.at(num + 3 * previousPairings.size() + numToAdd) == "TRUE") {
-                toAdd.push_back(row.at(num + 3 * previousPairings.size()));
+                if(previousPairings.size() > 0) {
+                    toAdd.push_back(row.at(num + 3 * previousPairings.size()));
+                }
+                else {
+                    toAdd.push_back(row.at(42).substr(3, 6));
+                }
                 toAdd.push_back(row.at(27));
                 unrankedPlayers.push_back(toAdd);
             }
@@ -226,7 +231,7 @@ int main() {
     
     //Writes pairings to .csv file
     std::ofstream outputSheet;
-    outputSheet.open("pairings2.csv");
+    outputSheet.open("pairings.csv");
 
     for(std::vector<std::string> playerVec : rankedPlayers) {
         std::string playerName = playerVec.at(1);
